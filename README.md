@@ -1,0 +1,1 @@
+# JaxRs Application example/skeleton in Scala
