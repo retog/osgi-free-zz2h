@@ -1,4 +1,4 @@
-package org.example.rest
+package org.zazukoians.zz2h
 
 import java.util.EnumSet
 import javax.servlet.DispatcherType
