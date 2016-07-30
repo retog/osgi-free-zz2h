@@ -20,16 +20,15 @@ class RootResource {
   @GET
   @Path("{path: .*}")
   def get(@Context uriInfo: UriInfo) : Response = {
-    /*val static = ConfigDirProvider.publicNode.getSubPath(path); 
-    if (static.exists) {
-      throw new RuntimeException("hooray: "+path);
-    }*/
-    //set vary: Accept header
-    Response.ok({
-        val iri : IRI = new IRI(uriInfo.getAbsolutePath().toString());
-        val result = gnp.getLocal(iri)
-        result
-    }).header("Vary", "Accept").build();
-    
+    val iri : IRI = new IRI(uriInfo.getAbsolutePath().toString());
+    val node = gnp.getLocal(iri)
+    val context = node.getNodeContext
+    if (context.size == 0) {
+      Response.status(404).build();
+    } else {
+      Response.ok({
+        node
+      }).header("Vary", "Accept").build();
+    }
   }
 }
