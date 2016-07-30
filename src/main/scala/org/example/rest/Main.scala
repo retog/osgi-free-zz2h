@@ -8,7 +8,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder
 import org.eclipse.jetty.util.resource.Resource
 
-object App {
+object Main {
 
   def main(args: Array[String]) {
     val context = new ServletContextHandler(ServletContextHandler.SESSIONS)
@@ -18,8 +18,9 @@ object App {
       DispatcherType.REQUEST)
     val jerseyFilter = context.addFilter(classOf[org.glassfish.jersey.servlet.ServletContainer], "/*", 
       all)
-    jerseyFilter.setInitParameter("jersey.config.server.provider.classnames", classOf[RootResource].getCanonicalName + ", " + classOf[MyGraphWriter].getCanonicalName)
+    jerseyFilter.setInitParameter("jersey.config.server.provider.packages", this.getClass.getPackage.getName)
     jerseyFilter.setInitParameter("jersey.config.servlet.filter.forwardOn404", "true")
+    jerseyFilter.setInitParameter("jersey.config.server.provider.scanning.recursive", "true")
     val resourceRoot = Resource.newResource(classOf[App].getResource("/META-INF/resources/"))
     context.setBaseResource(resourceRoot)
     val holderPwd = new ServletHolder("default", classOf[DefaultServlet])

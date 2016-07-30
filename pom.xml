@@ -50,22 +50,22 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>2.22.2</version>
+            <version>2.23.1</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet-core</artifactId>
-            <version>2.22.2</version>
+            <version>2.23.1</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-jetty-http</artifactId>
-            <version>2.22.2</version>
+            <version>2.23.1</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-moxy</artifactId>
-            <version>2.22.2</version>
+            <version>2.23.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -139,7 +139,7 @@
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Main-Class>org.example.rest.App</Main-Class>
+                                        <Main-Class>org.example.rest.Main</Main-Class>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
