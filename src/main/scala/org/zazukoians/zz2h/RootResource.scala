@@ -15,7 +15,7 @@ import org.apache.clerezza.rdf.utils.graphnodeprovider.GraphNodeProvider
 @Path("")
 class RootResource {
 
-  var gnp: GraphNodeProvider = new Zz2hGraphNodeProvider
+  var gnp: GraphNodeProvider = GraphNodeProviderFactory.getGraphNodeProvider
   
   @GET
   @Path("{path: .*}")
