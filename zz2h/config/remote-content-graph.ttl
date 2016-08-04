@@ -1,6 +1,8 @@
+@prefix zz2h: <http://zz2h.zazukoians.org/ontology/> .
+
 <http://lindas-data.ch/sparql>
-        a       <http://sparql.endpoint/> ;
-        <http://example.org/replacement> [
-        <http://example.org/targetPrefix> "http://localhost:5000/"; 
-        <http://example.org/sourcePrefix> "http://data.admin.ch/"
+    a       zz2h:sparqlEndpoint ;
+    zz2h:replacement [
+        zz2h:targetPrefix "http://localhost:5000/"; 
+        zz2h:sourcePrefix "http://data.admin.ch/"
     ] .

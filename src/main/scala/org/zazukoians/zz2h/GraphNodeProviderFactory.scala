@@ -45,15 +45,16 @@ object GraphNodeProviderFactory {
     val locationG = parser.parse(config.getInputStream, SupportedFormat.TURTLE)
     val p = new Preamble(locationG)
     import p._
-    val endpoint = "http://sparql.endpoint/".iri/-RDF.`type`
+    def zz2h(localName: String) = ("http://zz2h.zazukoians.org/ontology/"+localName).iri
+    val endpoint = zz2h("sparqlEndpoint")/-RDF.`type`
     var g: Graph = new SparqlGraph(endpoint.getNode.asInstanceOf[IRI].getUnicodeString)
-    val replacementNodes = endpoint/"http://example.org/replacement".iri
+    val replacementNodes = endpoint/zz2h("replacement")
     if (replacementNodes.length > 1) {
       throw new RuntimeException("Multiple prefix-mapping not yet supported")
     }
     for (r <- replacementNodes) {
-      val sourcePrefix = (r/"http://example.org/sourcePrefix".iri*)
-      val targetPrefix = (r/"http://example.org/targetPrefix".iri*)
+      val sourcePrefix = (r/zz2h("sourcePrefix")*)
+      val targetPrefix = (r/zz2h("targetPrefix")*)
       g = new UriMutatingGraph(g, sourcePrefix, targetPrefix)
     }
     new GraphBackedGraphNodeProvider(g)
