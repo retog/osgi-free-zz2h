@@ -2,6 +2,7 @@
 
 <http://lindas-data.ch/sparql>
     a       zz2h:sparqlEndpoint ;
+    zz2h:useDescribe true;
     zz2h:replacement [
         zz2h:targetPrefix "http://localhost:5000/"; 
         zz2h:sourcePrefix "http://data.admin.ch/"

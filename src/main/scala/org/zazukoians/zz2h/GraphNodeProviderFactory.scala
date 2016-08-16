@@ -10,8 +10,10 @@ import org.apache.clerezza.commons.rdf.impl.utils.simple.SimpleGraph
 import org.apache.clerezza.rdf.ontologies.DC
 import org.apache.clerezza.rdf.ontologies.RDF
 import org.apache.clerezza.rdf.ontologies.RDFS
+import org.apache.clerezza.rdf.scala.utils.CollectedIter
 import org.apache.clerezza.rdf.scala.utils.EzGraph
 import org.apache.clerezza.rdf.scala.utils.Preamble
+import org.apache.clerezza.rdf.scala.utils.RichGraphNode
 import org.apache.clerezza.rdf.utils.GraphNode
 import org.apache.clerezza.rdf.utils.UriMutatingGraph
 import org.apache.clerezza.rdf.utils.graphnodeprovider.GraphNodeProvider
@@ -47,16 +49,24 @@ object GraphNodeProviderFactory {
     import p._
     def zz2h(localName: String) = ("http://zz2h.zazukoians.org/ontology/"+localName).iri
     val endpoint = zz2h("sparqlEndpoint")/-RDF.`type`
-    var g: Graph = new SparqlGraph(endpoint.getNode.asInstanceOf[IRI].getUnicodeString)
-    val replacementNodes = endpoint/zz2h("replacement")
-    if (replacementNodes.length > 1) {
-      throw new RuntimeException("Multiple prefix-mapping not yet supported")
+    val replacementNodes: CollectedIter[RichGraphNode] = endpoint/zz2h("replacement")
+    val useDescribe = (endpoint/zz2h("useDescribe")*) == "true"
+    if (useDescribe) {
+      var replacementMap: Map[String, String] = Map(); 
+      for (r <- replacementNodes) {
+        val sourcePrefix = (r/zz2h("sourcePrefix")*)
+        val targetPrefix = (r/zz2h("targetPrefix")*)
+        replacementMap += (sourcePrefix -> targetPrefix)
+      }
+      new DescribeGraphNodeProvider(endpoint.getNode.asInstanceOf[IRI], replacementMap)
+    } else {
+      var g: Graph = new SparqlGraph(endpoint.getNode.asInstanceOf[IRI].getUnicodeString)
+      for (r <- replacementNodes) {
+        val sourcePrefix = (r/zz2h("sourcePrefix")*)
+        val targetPrefix = (r/zz2h("targetPrefix")*)
+        g = new UriMutatingGraph(g, sourcePrefix, targetPrefix)
+      }
+      new GraphBackedGraphNodeProvider(g)
     }
-    for (r <- replacementNodes) {
-      val sourcePrefix = (r/zz2h("sourcePrefix")*)
-      val targetPrefix = (r/zz2h("targetPrefix")*)
-      g = new UriMutatingGraph(g, sourcePrefix, targetPrefix)
-    }
-    new GraphBackedGraphNodeProvider(g)
   }
 }
