@@ -10,8 +10,10 @@ import org.apache.clerezza.rdf.utils.graphnodeprovider.GraphNodeProvider
 class DescribeGraphNodeProvider(endpoint: IRI, 
          replacementMap:  Map[String, String]) extends GraphNodeProvider {
   val sparqlClient = new SparqlClient(endpoint.getUnicodeString)
+  
+  //not actually used, only here to implement the interface
   def existsLocal(iri: IRI): Boolean = {
-    //TODO uri translation
+    //TODO make configurable
     sparqlClient.queryResult("ASK {"+mutateUriReverse(iri)+" ?p ?o}").asInstanceOf[Boolean];
   }
   def get(iri: IRI): GraphNode = getLocal(iri);
